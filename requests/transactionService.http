@@ -1,0 +1,16 @@
+### Category - Get All
+GET http://localhost:8081/api/v1/category
+
+### Category - Get by id
+GET http://localhost:8081/api/v1/category/a5c09cbc-97c7-4e67-a8aa-0fc0b2b57bdd
+
+### Category - Create New
+POST http://localhost:8081/api/v1/category
+Content-Type: application/json
+
+{
+  "name": "Games"
+}
+
+### Category - Delete by id
+DELETE http://localhost:8081/api/v1/category/a5c09cbc-97c7-4e67-a8aa-0fc0b2b57bdd
