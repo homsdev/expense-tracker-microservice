@@ -1,5 +1,26 @@
-### GET request to example server
-GET https://examples.http-client.intellij.net/get
-    ?generated-in=IntelliJ IDEA
+### Accounts - Get Accounts
+GET http://localhost:{{port}}/api/v1/accounts
 
-###
+### Accounts - Get Account by id
+GET http://localhost:{{port}}/api/v1/accounts/{{accountId}}
+
+### Accounts - Create new Account
+POST http://localhost:{{port}}/api/v1/accounts
+Content-Type: application/json
+
+{
+  "balance": 150000.00,
+  "currency": "MXN",
+  "name": "Main"
+}
+
+### Accounts - Delete Account by id
+DELETE http://localhost:{{port}}/api/v1/accounts/{{accountId}}
+
+### Accounts - Update Balance
+PATCH http://localhost:{{port}}/api/v1/accounts/{{accountId}}/balance
+Content-Type: application/json
+
+{
+    "amount": -10000.00
+}

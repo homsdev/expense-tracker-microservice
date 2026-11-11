@@ -6,7 +6,7 @@ import com.homsdev.transactions_service.model.Category;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface TransactionMapper {
+public interface CategoryMapper {
     CategoryResponse toCategoryResponse(Category category);
     Category toCategory(CreateCategoryRequest request);
 }

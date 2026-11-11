@@ -1,4 +1,4 @@
-package com.homsdev.transactions_service.exception;
+package com.homsdev.account_service.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String resource, String id) {

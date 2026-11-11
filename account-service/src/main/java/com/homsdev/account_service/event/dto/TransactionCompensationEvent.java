@@ -2,7 +2,7 @@ package com.homsdev.account_service.event.dto;
 
 import java.math.BigDecimal;
 
-public record TransactionCompesationEvent(
+public record TransactionCompensationEvent(
         String transactionId,
         String accountId,
         BigDecimal amount,

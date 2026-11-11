@@ -1,4 +1,4 @@
-package com.homsdev.account_service.event.dto;
+package com.homsdev.transactions_service.event.dto;
 
 import java.math.BigDecimal;
 

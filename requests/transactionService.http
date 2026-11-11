@@ -1,16 +1,51 @@
 ### Category - Get All
-GET http://localhost:8081/api/v1/category
+GET http://localhost:{{port}}/api/v1/category
 
 ### Category - Get by id
-GET http://localhost:8081/api/v1/category/a5c09cbc-97c7-4e67-a8aa-0fc0b2b57bdd
+GET http://localhost:{{port}}/api/v1/category/{{categoryId}}
 
 ### Category - Create New
-POST http://localhost:8081/api/v1/category
+POST http://localhost:{{port}}/api/v1/category
 Content-Type: application/json
 
 {
-  "name": "Games"
+  "name": "Restaurants"
 }
 
 ### Category - Delete by id
-DELETE http://localhost:8081/api/v1/category/a5c09cbc-97c7-4e67-a8aa-0fc0b2b57bdd
+DELETE http://localhost:{{port}}/api/v1/category/{{categoryId}}
+
+### Transaction - Get All
+GET http://localhost:{{port}}/api/v1/transaction
+
+### Transaction - Get By Id
+GET http://localhost:{{port}}/api/v1/transaction/{{transactionId}}
+
+### Transaction - Create
+POST http://localhost:{{port}}/api/v1/transaction
+Content-Type: application/json
+
+{
+  "type": "EXPENSE",
+  "description": "Doña Blanca",
+  "amount": -1000,
+  "currency": "MXN",
+  "accountId": "{{accountId}}",
+  "categoryId": "{{categoryId}}"
+}
+
+### Transaction - Delete
+DELETE http://localhost:{{port}}/api/v1/transaction/{{transactionId}}
+
+### Transaction - Create with invalid accountId
+POST http://localhost:{{port}}/api/v1/transaction
+Content-Type: application/json
+
+{
+  "type": "EXPENSE",
+  "description": "Restaurants",
+  "amount": -10000,
+  "currency": "MXN",
+  "accountId": "invalid-id",
+  "categoryId": "{{categoryId}}"
+}
