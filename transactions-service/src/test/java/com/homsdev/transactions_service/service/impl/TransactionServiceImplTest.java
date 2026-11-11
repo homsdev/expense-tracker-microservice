@@ -49,12 +49,16 @@ class TransactionServiceImplTest {
     private TransactionServiceImpl transactionService;
 
     @Test
-    void createTransactionSavesWithCategoryAndPublishesEvent() {
+    void createTransactionPublishesNegativeAmountForExpense() {
         CreateTransactionRequest request = buildRequest();
         Transaction mapped = new Transaction();
+        mapped.setType(TransactionType.EXPENSE);
+        mapped.setAmount(new BigDecimal("25.50"));
         Category category = new Category();
         Transaction saved = new Transaction();
         saved.setId("tx-1");
+        saved.setType(TransactionType.EXPENSE);
+        saved.setAmount(new BigDecimal("-25.50"));
         TransactionResponse response = new TransactionResponse();
 
         when(transactionMapper.toTransaction(request)).thenReturn(mapped);
@@ -71,6 +75,30 @@ class TransactionServiceImplTest {
         verify(rabbitTemplate).convertAndSend(eq("transaction-exchange"), eq("transaction.created"), eventCaptor.capture());
         assertThat(eventCaptor.getValue().transactionId()).isEqualTo("tx-1");
         assertThat(eventCaptor.getValue().accountId()).isEqualTo("acc-1");
+        assertThat(eventCaptor.getValue().amount()).isEqualByComparingTo("-25.50");
+        assertThat(mapped.getAmount()).isEqualByComparingTo("-25.50");
+    }
+
+    @Test
+    void createTransactionPublishesPositiveAmountForIncome() {
+        CreateTransactionRequest request = buildRequest();
+        request.setType(TransactionType.INCOME);
+        Transaction mapped = new Transaction();
+        Category category = new Category();
+        Transaction saved = new Transaction();
+        saved.setId("tx-1");
+        saved.setType(TransactionType.INCOME);
+        saved.setAmount(new BigDecimal("25.50"));
+
+        when(transactionMapper.toTransaction(request)).thenReturn(mapped);
+        when(categoryRepository.findById("cat-1")).thenReturn(Optional.of(category));
+        when(transactionRepository.save(mapped)).thenReturn(saved);
+        when(transactionMapper.toTransactionResponse(saved)).thenReturn(new TransactionResponse());
+
+        transactionService.createTransaction(request);
+
+        ArgumentCaptor<TransactionCreatedEvent> eventCaptor = ArgumentCaptor.forClass(TransactionCreatedEvent.class);
+        verify(rabbitTemplate).convertAndSend(eq("transaction-exchange"), eq("transaction.created"), eventCaptor.capture());
         assertThat(eventCaptor.getValue().amount()).isEqualByComparingTo("25.50");
     }
 

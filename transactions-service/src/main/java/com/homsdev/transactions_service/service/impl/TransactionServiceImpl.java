@@ -2,6 +2,7 @@ package com.homsdev.transactions_service.service.impl;
 
 import com.homsdev.transactions_service.dto.CreateTransactionRequest;
 import com.homsdev.transactions_service.dto.TransactionResponse;
+import com.homsdev.transactions_service.enums.TransactionType;
 import com.homsdev.transactions_service.event.TransactionCreatedEvent;
 import com.homsdev.transactions_service.exception.ResourceNotFoundException;
 import com.homsdev.transactions_service.mapper.TransactionMapper;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -40,11 +42,15 @@ public class TransactionServiceImpl implements TransactionService {
 
         transaction.setCategory(category);
 
+        if (transaction.getType() == TransactionType.EXPENSE) {
+            transaction.setAmount(transaction.getAmount().negate());
+        }
+
         Transaction savedTransaction = transactionRepository.save(transaction);
         log.info("Transaction saved: {}", savedTransaction);
 
         TransactionCreatedEvent event = new TransactionCreatedEvent(
-                savedTransaction.getId(), request.getAccountId(), request.getAmount()
+                savedTransaction.getId(), request.getAccountId(), savedTransaction.getAmount()
         );
 
         rabbitTemplate.convertAndSend("transaction-exchange", "transaction.created", event);
