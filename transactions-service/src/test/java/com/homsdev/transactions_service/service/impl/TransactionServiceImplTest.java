@@ -58,7 +58,7 @@ class TransactionServiceImplTest {
         Transaction saved = new Transaction();
         saved.setId("tx-1");
         saved.setType(TransactionType.EXPENSE);
-        saved.setAmount(new BigDecimal("-25.50"));
+        saved.setAmount(new BigDecimal("25.50"));
         TransactionResponse response = new TransactionResponse();
 
         when(transactionMapper.toTransaction(request)).thenReturn(mapped);
@@ -76,7 +76,6 @@ class TransactionServiceImplTest {
         assertThat(eventCaptor.getValue().transactionId()).isEqualTo("tx-1");
         assertThat(eventCaptor.getValue().accountId()).isEqualTo("acc-1");
         assertThat(eventCaptor.getValue().amount()).isEqualByComparingTo("-25.50");
-        assertThat(mapped.getAmount()).isEqualByComparingTo("-25.50");
     }
 
     @Test

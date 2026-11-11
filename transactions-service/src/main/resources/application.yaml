@@ -26,38 +26,3 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
-# ✅ CONFIGURACIÓN UNIFICADA DE MANAGEMENT (Observabilidad + Actuator)
-management:
-  tracing:
-    sampling:
-      probability: 1.0  # Captura el 100% de las trazas para desarrollo
-  opentelemetry:
-    tracing:
-      export:
-        otlp:
-          endpoint: http://localhost:4318/v1/traces
-    logging:
-      export:
-        otlp:
-          endpoint: http://localhost:4318/v1/logs
-  otlp:
-    metrics:
-      export:
-        url: http://localhost:4318/v1/metrics
-  endpoint:
-    health:
-      show-details: always
-  health:
-    circuitbreakers:
-      enabled: true
-  endpoints:
-    web:
-      exposure:
-        # Importante: Mantener 'prometheus' para la recolección de métricas en Grafana
-        include: "refresh, health, circuitbreakers, prometheus"
-# ✅ CORRELACIÓN DE LOGS (TraceID y SpanID en consola de IntelliJ/Docker)
-logging:
-  pattern:
-    level: "%5p [${spring.application.name:},%X{trace_id:-},%X{span_id:-}]"
-order:
-  enabled: true

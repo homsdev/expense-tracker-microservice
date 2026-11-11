@@ -42,15 +42,15 @@ public class TransactionServiceImpl implements TransactionService {
 
         transaction.setCategory(category);
 
-        if (transaction.getType() == TransactionType.EXPENSE) {
-            transaction.setAmount(transaction.getAmount().negate());
-        }
-
         Transaction savedTransaction = transactionRepository.save(transaction);
         log.info("Transaction saved: {}", savedTransaction);
 
+        BigDecimal accountBalanceChange = savedTransaction.getType() == TransactionType.EXPENSE
+                ? savedTransaction.getAmount().negate()
+                : savedTransaction.getAmount();
+
         TransactionCreatedEvent event = new TransactionCreatedEvent(
-                savedTransaction.getId(), request.getAccountId(), savedTransaction.getAmount()
+                savedTransaction.getId(), request.getAccountId(), accountBalanceChange
         );
 
         rabbitTemplate.convertAndSend("transaction-exchange", "transaction.created", event);

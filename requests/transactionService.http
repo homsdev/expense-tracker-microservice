@@ -28,7 +28,7 @@ Content-Type: application/json
 {
   "type": "EXPENSE",
   "description": "Doña Blanca",
-  "amount": -1000,
+  "amount": 1000,
   "currency": "MXN",
   "accountId": "{{accountId}}",
   "categoryId": "{{categoryId}}"
